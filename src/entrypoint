@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+BASE=$1
+BASE_TAG=$2
+REPOSITORY=$3
+EVENT=$4
+
+if [ "$EVENT" == "release" ]; then
+  IMAGE_TAG=$BASE_TAG
+  echo "--------------------------------RELEASE BUILD---------------------------------"
+else
+  IMAGE_TAG=nightly_$BASE_TAG
+  echo "--------------------------------NIGHTLY BUILD---------------------------------"
+fi
+
+echo "$BASE"
+echo "$BASE_TAG"
+
+echo "Building image $REPOSITORY:$IMAGE_TAG..."
+
+REPOSITORY=$REPOSITORY BASE=$BASE BASE_TAG=$BASE_TAG IMAGE_TAG=$IMAGE_TAG \
+  docker-compose -f torchstar-docker/src/docker-compose.yml build || exit 1
+
+echo "Pushing image $REPOSITORY:$IMAGE_TAG..."
+REPOSITORY=$REPOSITORY BASE=$BASE BASE_TAG=$BASE_TAG IMAGE_TAG=$IMAGE_TAG \
+  docker-compose -f torchstar-docker/src/docker-compose.yml push || exit 1
+
+docker logout

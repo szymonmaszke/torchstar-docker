@@ -1,0 +1,11 @@
+---
+version: "3.7"
+services:
+  library:
+    build:
+      context: ../..
+      args:
+        BASE: ${BASE}
+        TAG: ${BASE_TAG}
+      dockerfile: torchstar-docker/src/Dockerfile
+    image: ${REPOSITORY}:${IMAGE_TAG}

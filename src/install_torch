@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [ "$1" != "nvidia/cuda" ]; then
+  pip install torch==1.2.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
+elif [[ "$2" == *"9.2"* ]]; then
+  pip install torch==1.2.0+cu92 -f https://download.pytorch.org/whl/torch_stable.html
+fi
+
+pip install -v .
